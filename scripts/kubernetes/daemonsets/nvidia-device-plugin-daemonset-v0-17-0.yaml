@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    deprecated.daemonset.template.generation: "3"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"nvidia-device-plugin-daemonset","namespace":"kube-system"},"spec":{"selector":{"matchLabels":{"name":"nvidia-device-plugin-ds"}},"template":{"metadata":{"labels":{"name":"nvidia-device-plugin-ds"}},"spec":{"containers":[{"env":[{"name":"FAIL_ON_INIT_ERROR","value":"false"}],"image":"***REMOVED***.dkr.ecr.ap-northeast-2.amazonaws.com/k8s-device-plugin:v0.17.0","name":"nvidia-device-plugin-ctr","securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}},"volumeMounts":[{"mountPath":"/var/lib/kubelet/device-plugins","name":"device-plugin"}]}],"priorityClassName":"system-node-critical","tolerations":[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"},{"key":"dedicated","operator":"Equal","value":"4-16-1"},{"key":"dedicated","operator":"Equal","value":"aix-ray-worker-gpu"}],"volumes":[{"hostPath":{"path":"/var/lib/kubelet/device-plugins"},"name":"device-plugin"}]}},"updateStrategy":{"type":"RollingUpdate"}}}
+  creationTimestamp: "2023-11-23T01:47:48Z"
+  generation: 3
+  name: nvidia-device-plugin-daemonset
+  namespace: kube-system
+  resourceVersion: "466520350"
+  uid: 77ad8691-9b20-403d-bcc5-8af9c00134f6
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: nvidia-device-plugin-ds
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: nvidia-device-plugin-ds
+    spec:
+      containers:
+      - env:
+        - name: FAIL_ON_INIT_ERROR
+          value: "false"
+        image: ***REMOVED***.dkr.ecr.ap-northeast-2.amazonaws.com/k8s-device-plugin:v0.17.0
+        imagePullPolicy: IfNotPresent
+        name: nvidia-device-plugin-ctr
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/kubelet/device-plugins
+          name: device-plugin
+      dnsPolicy: ClusterFirst
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Exists
+      - key: dedicated
+        operator: Equal
+        value: 4-16-1
+      - key: dedicated
+        operator: Equal
+        value: aix-ray-worker-gpu
+      volumes:
+      - hostPath:
+          path: /var/lib/kubelet/device-plugins
+          type: ""
+        name: device-plugin
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 4
+  desiredNumberScheduled: 4
+  numberAvailable: 4
+  numberMisscheduled: 5
+  numberReady: 4
+  observedGeneration: 3
+  updatedNumberScheduled: 4
