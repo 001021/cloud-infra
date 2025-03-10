@@ -1,95 +1,78 @@
-# 🚀 Cloud Infrastructure Portfolio  
+# 🚀 Cloud Infrastructure Automation
 
-이 저장소는 **AWS 및 Kubernetes 인프라 운영 자동화**를 위한 코드 및 문서를 포함합니다.  
-EKS 클러스터 운영, IAM Role 관리, CloudWatch 비용 최적화, Terraform 기반 인프라 배포 등의 내용을 다룹니다.
+AWS 및 Kubernetes 기반 클라우드 인프라를 효율적으로 관리하기 위한 자동화 스크립트 및 IaC 코드를 포함하는 레포지토리입니다.
 
 ## 📂 디렉토리 구조
 ```
-cloud-infra-portfolio
-├── 📂 scripts                # 운영 자동화 스크립트
-│   ├── 📂 aws               # AWS 관련 스크립트
-│   │   ├── delete-iam-roles.sh  # IAM Role 삭제 자동화
-│   │   ├── cloudwatch-cost-optimizer.sh  # CloudWatch 비용 최적화
-│   │   ├── ...
-│   ├── 📂 kubernetes        # Kubernetes 관련 스크립트 (EKS 관리)
-│   │   ├── eks-upgrade.sh   # EKS 클러스터 업그레이드 자동화
-│   │   ├── deploy-velero.sh # Velero 백업 설정
-│   │   ├── ...
-│   ├── 📂 lambda            # Lambda 기반 운영 자동화 스크립트
-│
-├── 📂 infra                 # 인프라 코드 (IaC)
-│   ├── 📂 cloudformation-templates
-│   ├── 📂 terraform-scripts
-│
-├── 📂 docs                   # 문서 및 정리된 자료
-│   ├── AWS-Cost-Optimization.md  # AWS 비용 최적화 가이드
-│   ├── Kubernetes-Guide.md       # EKS 운영 가이드
-│
-├── 📂 projects               # 프로젝트별 코드 모음
-│   ├── 📂 release-notes-sharing  # Kakao i Cloud 기반 프로젝트
-│
-└── README.md                 # 저장소 개요 (현재 파일)
+.
+├── README.md                        # 프로젝트 개요 및 설명
+├── assets/                           # 프로젝트 관련 이미지 및 파일
+├── docs/                             # 문서화 관련 파일 (아키텍처 다이어그램, 설명서)
+├── infra/                            # Infrastructure as Code (IaC) 관련 코드
+│   ├── cloudformation-templates/    # AWS CloudFormation 템플릿
+│   ├── terraform-scripts/           # Terraform을 활용한 인프라 배포 스크립트
+├── projects/                         # 개별 프로젝트별 관리 디렉토리
+├── scripts/                          # 운영 자동화 및 관리 스크립트
+│   ├── aws/                          # AWS 관련 스크립트
+│   │   ├── cloud9/                  # AWS Cloud9 설정 자동화
+│   │   ├── eks/                     # Amazon EKS 관련 관리 스크립트
+│   │   ├── iam/                     # IAM 역할 및 정책 관리 스크립트
+│   │   ├── security/                # 보안 그룹 관리 스크립트
+│   │   ├── service-catalog/         # AWS Service Catalog 자동화 스크립트
+│   ├── kubernetes/                   # Kubernetes 관련 리소스 및 설정 파일
+│   │   ├── workloads/               # Kubernetes Pod 및 Deployment 설정
+│   │   ├── daemonsets/              # DaemonSet 리소스 관리 (NVIDIA GPU 등)
+│   ├── lambda/                       # AWS Lambda 관련 스크립트
 ```
 
+## 🔹 개요
+이 레포지토리는 AWS 클라우드 및 Kubernetes 인프라 자동화를 위한 다양한 스크립트와 템플릿을 제공합니다.
 
-## 🚀 주요 기능
-✅ **AWS 운영 자동화**
-- IAM Role 관리 (생성, 삭제)
-- CloudWatch 로그 비용 최적화
-- S3, EC2, VPC 네트워크 관리 스크립트
+## 📂 디렉토리 설명
 
-✅ **Kubernetes(EKS) 관리**
-- EKS 클러스터 업그레이드 (`eks-upgrade.sh`)
-- Velero를 활용한 백업 & 복구 (`deploy-velero.sh`)
-- ArgoCD 및 인프라 배포 자동화
-
-✅ **Infrastructure as Code (IaC)**
-- Terraform을 이용한 VPC, EC2, IAM, EKS 설정
-- CloudFormation 템플릿 모음
-
-✅ **운영 자동화 & 비용 최적화**
-- AWS Lambda 기반 운영 자동화 스크립트
-- CloudWatch Logs → S3 아카이빙 자동화
-
-
-## 🛠 기술 스택
-- **Cloud:** AWS (EKS, IAM, CloudWatch, S3, EC2, Lambda)
-- **Kubernetes:** Amazon EKS, Helm, Velero, ArgoCD
-- **Infrastructure as Code:** Terraform, AWS CloudFormation
-- **Scripting & Automation:** Bash, AWS CLI, Python
-- **Monitoring & Logging:** CloudWatch, Fluent Bit
-
-
-## 📌 사용 방법
-1. **IAM Role 삭제 자동화 실행**
-   ```bash
-   chmod +x scripts/aws/delete-iam-roles.sh
-   ./scripts/aws/delete-iam-roles.sh
-   ```
-2. **EKS 클러스터 업그레이드**
-   ```bash
-   chmod +x scripts/kubernetes/eks-upgrade.sh
-   ./scripts/kubernetes/eks-upgrade.sh
-   ```
-
-3. **CloudWatch 로그 비용 최적화**
-   ```bash
-   chmod +x scripts/aws/cloudwatch-cost-optimizer.sh
-   ./scripts/aws/cloudwatch-cost-optimizer.sh
-   ```
-
-## 📜 문서 및 가이드
-- [AWS 비용 최적화 가이드](docs/AWS-Cost-Optimization.md)
-- [EKS 운영 가이드](docs/Kubernetes-Guide.md)
-- [Terraform 기반 인프라 구축](docs/Terraform-Guide.md)
-
-
-## 📌 추가할 내용
-- [ ] CI/CD 자동화 (GitHub Actions 추가)
-- [ ] 추가적인 AWS Lambda 운영 자동화 스크립트
-- [ ] 더 많은 Kubernetes 운영 자동화 코드
+- **`assets/`**: 프로젝트 관련 이미지, 다이어그램, 참고 파일 저장
+- **`docs/`**: 문서화 관련 디렉토리 (예: 아키텍처 설명서, 가이드)
+- **`infra/`**: Infrastructure as Code(IaC) 관련 코드 관리
+  - `cloudformation-templates/` → AWS CloudFormation 템플릿
+  - `terraform-scripts/` → Terraform을 활용한 인프라 배포 스크립트
+- **`projects/`**: 프로젝트별 관리 디렉토리
+- **`scripts/`**: AWS 및 Kubernetes 운영 자동화 스크립트
+  - `aws/` → AWS 관련 자동화 스크립트
+    - `cloud9/` → AWS Cloud9 개발 환경 설정
+    - `eks/` → EKS 클러스터 및 노드 그룹 관리
+    - `iam/` → IAM 역할 및 정책 설정
+    - `security/` → 보안 그룹 및 네트워크 정책 관리
+    - `service-catalog/` → AWS Service Catalog 자동화 배포
+  - `kubernetes/` → Kubernetes 관련 리소스 및 설정 파일
+    - `workloads/` → Kubernetes Pod 및 Deployment 설정
+    - `daemonsets/` → NVIDIA GPU 관련 DaemonSet 관리
+  - `lambda/` → AWS Lambda 관련 자동화 스크립트
 
 ---
 
-## 📢 Contact
-이 프로젝트에 대한 피드백이나 문의 사항이 있다면 언제든지 연락 주세요! 😊  
+## **🚀 설치 및 사용 방법**
+1. **레포지토리 클론**
+   ```bash
+   git clone https://github.com/your-repo-name.git
+   cd your-repo-name
+   ```
+2. **스크립트 실행**
+   ```bash
+   chmod +x scripts/aws/eks/create-gpu-nodegroups.sh
+   ./scripts/aws/eks/create-gpu-nodegroups.sh
+   ```
+3. **Terraform 적용**
+   ```bash
+   cd infra/terraform-scripts
+   terraform init
+   terraform apply
+   ```
+
+---
+
+## 🔹 기여 방법
+1. **이슈 생성**: 버그나 개선 사항이 있다면 Issue를 생성해주세요.
+2. **PR 요청**: 새로운 기능을 추가하거나 수정사항이 있다면 PR을 보내주세요.
+
+🚀 **AWS 클라우드 자동화에 기여하고 싶다면 언제든지 환영합니다!** 🎉
+
