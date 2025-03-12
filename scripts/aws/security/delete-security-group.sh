@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REGION="ap-northeast-2"
-SG_NAME="***REMOVED***test-je-eks-worker-node-secgrp-01"
+SG_NAME=""
 
 # Security Group ID 조회
 SG_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=$SG_NAME" --region $REGION --query "SecurityGroups[*].GroupId" --output text)
