@@ -3,7 +3,7 @@ set -e  # 오류 발생 시 즉시 종료
 
 # AWS 리전 설정
 REGION="ap-northeast-2"
-SG_PREFIX="***REMOVED***test-je-eks-cluster-secgrp-01"
+SG_PREFIX=""
 
 echo "🔍 Searching for security groups with prefix '$SG_PREFIX'..."
 
