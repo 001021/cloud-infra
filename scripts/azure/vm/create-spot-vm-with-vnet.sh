@@ -6,7 +6,7 @@ ENV="test"
 LOCATION="koreacentral"
 LOCATION_CODE="krc"  # 지역 코드 지정
 VM_SIZE="Standard_D2s_v3"
-SSH_KEY="~/.ssh/azure_vm_key.pub"
+SSH_KEY="~/.ssh/azure_vm_test_key.pub"
 
 # === [ 네이밍 규칙에 따라 리소스명 자동 생성 ] ===
 RESOURCE_GROUP="rg-${ENV}-${LOCATION_CODE}-${PROJECT}"
