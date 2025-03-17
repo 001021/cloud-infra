@@ -4,8 +4,8 @@
 REGION="ap-northeast-2"
 EKS_CLUSTER_NAME="eks-ct01-test-je-02"  # 클러스터 이름
 LAUNCH_TEMPLATE_NAME="eksnode-ct01-test-je-eks1.31-gpu-20250307110028"  # GPU 시작 템플릿
-SUBNET_IDS="***REMOVED***"  # 사용할 서브넷
-NODE_ROLE_ARN="arn:aws:iam::***REMOVED***:role/***REMOVED***eks-ct01-test-je-02-node-role"  # 노드 롤
+SUBNET_IDS=""  # 사용할 서브넷
+NODE_ROLE_ARN="arn:aws:iam::<ACCOUNT_ID>:role/eks-ct01-test-je-02-node-role"  # 노드 롤
 
 # GPU 노드 그룹 설정 (노드 그룹 이름 | 인스턴스 유형 | 스토리지 크기)
 declare -A GPU_NODE_GROUPS=(

@@ -4,7 +4,7 @@ metadata:
   annotations:
     deprecated.daemonset.template.generation: "3"
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"nvidia-device-plugin-daemonset","namespace":"kube-system"},"spec":{"selector":{"matchLabels":{"name":"nvidia-device-plugin-ds"}},"template":{"metadata":{"labels":{"name":"nvidia-device-plugin-ds"}},"spec":{"containers":[{"env":[{"name":"FAIL_ON_INIT_ERROR","value":"false"}],"image":"***REMOVED***.dkr.ecr.ap-northeast-2.amazonaws.com/k8s-device-plugin:v0.17.0","name":"nvidia-device-plugin-ctr","securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}},"volumeMounts":[{"mountPath":"/var/lib/kubelet/device-plugins","name":"device-plugin"}]}],"priorityClassName":"system-node-critical","tolerations":[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"},{"key":"dedicated","operator":"Equal","value":"4-16-1"},{"key":"dedicated","operator":"Equal","value":"aix-ray-worker-gpu"}],"volumes":[{"hostPath":{"path":"/var/lib/kubelet/device-plugins"},"name":"device-plugin"}]}},"updateStrategy":{"type":"RollingUpdate"}}}
+      {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"nvidia-device-plugin-daemonset","namespace":"kube-system"},"spec":{"selector":{"matchLabels":{"name":"nvidia-device-plugin-ds"}},"template":{"metadata":{"labels":{"name":"nvidia-device-plugin-ds"}},"spec":{"containers":[{"env":[{"name":"FAIL_ON_INIT_ERROR","value":"false"}],"image":"nvcr.io/nvidia/k8s-device-plugin:v0.17.0","name":"nvidia-device-plugin-ctr","securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}},"volumeMounts":[{"mountPath":"/var/lib/kubelet/device-plugins","name":"device-plugin"}]}],"priorityClassName":"system-node-critical","tolerations":[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"},{"key":"dedicated","operator":"Equal","value":"4-16-1"},{"key":"dedicated","operator":"Equal","value":"aix-ray-worker-gpu"}],"volumes":[{"hostPath":{"path":"/var/lib/kubelet/device-plugins"},"name":"device-plugin"}]}},"updateStrategy":{"type":"RollingUpdate"}}}
   creationTimestamp: "2023-11-23T01:47:48Z"
   generation: 3
   name: nvidia-device-plugin-daemonset
@@ -26,7 +26,7 @@ spec:
       - env:
         - name: FAIL_ON_INIT_ERROR
           value: "false"
-        image: ***REMOVED***.dkr.ecr.ap-northeast-2.amazonaws.com/k8s-device-plugin:v0.17.0
+        image: nvcr.io/nvidia/k8s-device-plugin:v0.17.0
         imagePullPolicy: IfNotPresent
         name: nvidia-device-plugin-ctr
         resources: {}

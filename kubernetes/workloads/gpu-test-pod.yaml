@@ -6,7 +6,7 @@ spec:
   restartPolicy: OnFailure
   containers:
   - name: vectoradd-test
-    image: ***REMOVED***.dkr.ecr.ap-northeast-2.amazonaws.com/nvidia/samples:vectoradd-cuda10.2
+    image: nvcr.io/nvidia/samples:vectoradd-cuda10.2
     resources:
       limits:
         nvidia.com/gpu: 1

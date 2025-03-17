@@ -69,7 +69,7 @@ aws ec2 create-launch-template \
     \"TagSpecifications\": [{
       \"ResourceType\": \"instance\",
       \"Tags\": [
-        {\"Key\": \"Name\", \"Value\": \"***REMOVED***eks-ct01-test-je-02-nodegrp\"},
+        {\"Key\": \"Name\", \"Value\": \"eks-ct01-test-je-02-nodegrp\"},
         {\"Key\": \"Backup\", \"Value\": \"velero_Daily_1AM\"}
       ]
     }],

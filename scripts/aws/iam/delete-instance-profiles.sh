@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 삭제할 Instance Profile 이름 패턴
-PROFILE_PREFIX="***REMOVED***eks-ct01-test-je-"
+PROFILE_PREFIX="eks-ct01-test-je-"
 PROFILE_SUFFIX="-cloud9-dev-profile-"
 
 echo "🔍 Searching and deleting instance profiles..."
