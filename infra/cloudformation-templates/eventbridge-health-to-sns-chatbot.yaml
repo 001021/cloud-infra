@@ -1,0 +1,200 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "SNS Topic Configuration"
+        Parameters:
+          - CreateNewSNSTopic
+          - ExistingSNSTopicArn
+          - NewSNSTopicName
+      - Label:
+          default: "EventBridge Rule Configuration"
+        Parameters:
+          - NewEventBridgeRuleName
+      - Label:
+          default: "AWS Chatbot Configuration"
+        Parameters:
+          - CreateNewChatbot
+          - SlackWorkspaceId
+          - SlackChannelId
+          - NewSlackChannelConfigurationName
+      - Label:
+          default: "IAM Role Configuration"
+        Parameters:
+          - CreateNewIAMRole
+          - ExistingIamRoleArn
+          - NewChatbotRoleName
+          - NewChatbotIAMPolicyName
+    ParameterLabels:
+      CreateNewSNSTopic:
+        default: "Create New SNS Topic"
+      ExistingSNSTopicArn:
+        default: "Existing SNS Topic ARN"
+      NewSNSTopicName:
+        default: "New SNS Topic Name"
+      NewEventBridgeRuleName:
+        default: "EventBridge Rule Name"
+      CreateNewChatbot:
+        default: "Enable AWS Chatbot"
+      SlackWorkspaceId:
+        default: "Slack Workspace ID"
+      SlackChannelId:
+        default: "Slack Channel ID"
+      NewSlackChannelConfigurationName:
+        default: "Slack Channel Configuration Name"
+      CreateNewIAMRole:
+        default: "Create New IAM Role"
+      ExistingIamRoleArn:
+        default: "Existing IAM Role ARN"
+      NewChatbotRoleName:
+        default: "New Chatbot Role Name"
+      NewChatbotIAMPolicyName:
+        default: "New Chatbot IAM Policy Name"
+Parameters:
+  CreateNewSNSTopic:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: "Whether to create a new SNS Topic"
+  ExistingSNSTopicArn:
+    Type: String
+    Default: ""
+    Description: "ARN of the existing SNS Topic (required if CreateNewSNSTopic is false)"
+  CreateNewChatbot:
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: "Whether to create AWS Chatbot for Slack notifications"
+  SlackWorkspaceId:
+    Type: String
+    Default: ""
+    Description: "Slack Workspace ID for AWS Chatbot (Required if CreateNewChatbot is true)"
+  SlackChannelId:
+    Type: String
+    Default: ""
+    Description: "Slack Channel ID for AWS Chatbot (Required if CreateNewChatbot is true)"
+  NewSlackChannelConfigurationName:
+    Type: String
+    Default: ""
+    Description: "Name for the Slack Channel Configuration"
+  NewSNSTopicName:
+    Type: String
+    Default: ""
+    Description: "Name for the new SNS Topic"
+  NewEventBridgeRuleName:
+    Type: String
+    Default: ""
+    Description: "Name for the EventBridge Rule"
+  CreateNewIAMRole:
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: "Whether to create a new IAM Role for Slack Channel"
+  ExistingIamRoleArn:
+    Type: String
+    Default: ""
+    Description: "ARN of the existing IAM Role for Slack Channel (required if CreateNewIAMRole is false)"
+  NewChatbotRoleName:
+    Type: String
+    Default: ""
+    Description: "Name for the new Chatbot IAM Role"
+  NewChatbotIAMPolicyName:
+    Type: String
+    Default: ""
+    Description: "Name for the new Chatbot IAM Policy"
+
+Conditions:
+  CreateSNSTopic: !Equals [!Ref CreateNewSNSTopic, "true"]
+  EnableChatbotCondition: !Equals [!Ref CreateNewChatbot, "true"]
+  CreateIamRole: !Equals [!Ref CreateNewIAMRole, "true"]
+Resources:
+  # SNS Topic (conditionally created)
+  HealthEventSNSTopic:
+    Type: "AWS::SNS::Topic"
+    Condition: CreateSNSTopic
+    Properties:
+      TopicName: !Ref NewSNSTopicName
+  # EventBridge Rule
+  HealthEventRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Name: !Ref NewEventBridgeRuleName
+      EventPattern:
+        source:
+          - "aws.health"
+        detail-type:
+          - "AWS Health Event"
+        detail:
+          eventScopeCode:
+            - "ACCOUNT_SPECIFIC"
+      Targets:
+        - Arn: !If
+            - CreateSNSTopic
+            - !Ref HealthEventSNSTopic
+            - !Ref ExistingSNSTopicArn
+          Id: "SNSTarget"
+  # Permissions for EventBridge to Publish to SNS
+  EventBridgeToSNSPermission:
+    Type: "AWS::SNS::TopicPolicy"
+    Condition: CreateSNSTopic
+    Properties:
+      Topics:
+        - !Ref HealthEventSNSTopic
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "events.amazonaws.com"
+            Action: "sns:Publish"
+            Resource: !Ref HealthEventSNSTopic
+  # Chatbot IAM Role (conditionally created)
+  ChatbotIamRole:
+    Type: "AWS::IAM::Role"
+    Condition: CreateIamRole
+    Properties:
+      RoleName: !Ref NewChatbotRoleName
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "chatbot.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: !Ref NewChatbotIAMPolicyName
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "cloudwatch:Describe"
+                  - "cloudwatch:Get*"
+                  - "cloudwatch:List*"
+                Resource: "*"
+  # AWS Chatbot Slack Channel Configuration (conditionally created)
+  ChatbotSlackConfiguration:
+    Type: "AWS::Chatbot::SlackChannelConfiguration"
+    Condition: EnableChatbotCondition
+    Properties:
+      ConfigurationName: !Ref NewSlackChannelConfigurationName
+      GuardrailPolicies:
+        - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+      IamRoleArn: !If
+        - CreateIamRole
+        - !GetAtt ChatbotIamRole.Arn
+        - !Ref ExistingIamRoleArn
+      SlackWorkspaceId: !Ref SlackWorkspaceId
+      SlackChannelId: !Ref SlackChannelId
+      SnsTopicArns:
+        - !If
+          - CreateSNSTopic
+          - !Ref HealthEventSNSTopic
+          - !Ref ExistingSNSTopicArn
